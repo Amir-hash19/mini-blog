@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     # apps
     "apps.accounts.apps.AccountsConfig",
     "apps.blogs.apps.BlogsConfig",
-    #"apps.activities.apps.ActivitiesConfig"
+    "apps.activities.apps.ActivitiesConfig"
 ]
 
 MIDDLEWARE = [
@@ -101,6 +101,10 @@ DATABASES = {
     },
 }
 
+
+DATABASE_ROUTERS = [
+    "core.database_router.DatabaseRouter",
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
