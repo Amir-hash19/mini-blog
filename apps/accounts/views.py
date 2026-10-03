@@ -3,13 +3,13 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework import status
+from rest_framework import status, viewsets, mixins
 from django.db import transaction
 
 import logging
-from .models import User
+from .models import User, Profile
 
-from .serializers import UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ProfileSerializer
+from .serializers import ProfileUpdateSerializer, UserRegistrationSerializer, UserLoginSerializer, UserSerializer, ProfileSerializer
 
 
 logger = logging.getLogger(__name__)
@@ -87,3 +87,21 @@ class UserProfileView(RetrieveAPIView):
             User.objects.select_related("profile")
             .get(id=self.request.user.id)
         )
+
+
+
+
+class ProfileUpdateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
+    """
+    API view for updating user profile.
+    """
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProfileUpdateSerializer
+
+    def get_queryset(self):
+        return Profile.objects.filter(
+            user=self.request.user
+        )
+
+    def get_object(self):
+        return self.request.user.profile
