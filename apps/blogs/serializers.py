@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post
+from .models import Post, Comment
 
 from django.utils import timezone
 
@@ -24,5 +24,24 @@ class PostSerializer(serializers.ModelSerializer):
 
         return Post.objects.create(
             author=author,
+            **validated_data
+        )
+
+
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.CharField(source="author.username", read_only=True)
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), write_only=True)
+
+    class Meta:
+        model = Comment
+        fields = ['post', 'author', 'content', 'parent', 'created_at', 'updated_at']
+        read_only_fields = ['author', 'created_at', 'updated_at']
+
+    def create(self, validated_data):
+        
+        return Comment.objects.create(
+            author=self.context["request"].user,
             **validated_data
         )
