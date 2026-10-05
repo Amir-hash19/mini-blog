@@ -1,10 +1,6 @@
 from django.db import models
 
 
-
-
-
-
 class Activity(models.Model):
     user_id = models.IntegerField()
 

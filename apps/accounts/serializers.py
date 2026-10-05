@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from .models import User, Profile
 
+from .models import Profile, User
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -9,19 +9,19 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password2']
+        fields = ["username", "email", "password", "password2"]
 
     def create(self, validated_data):
-        if validated_data['password'] != validated_data['password2']:
+        if validated_data["password"] != validated_data["password2"]:
             raise serializers.ValidationError("Passwords do not match.")
-        
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        return user
 
+        user = User.objects.create_user(
+            username=validated_data["username"],
+            email=validated_data["email"],
+            password=validated_data["password"],
+        )
+
+        return user
 
 
 class UserLoginSerializer(serializers.Serializer):
@@ -40,16 +40,12 @@ class UserLoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid username or password.")
 
         return data
-    
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = ['bio', 'avatar', 'created_at', 'updated_at']
-
-
-
+        fields = ["bio", "avatar", "created_at", "updated_at"]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -57,9 +53,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'profile']
-
-
+        fields = ["id", "username", "email", "profile"]
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):

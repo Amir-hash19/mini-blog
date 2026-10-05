@@ -8,26 +8,33 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Activity',
+            name="Activity",
             fields=[
-                ('id', django_mongodb_backend.fields.ObjectIdAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('user_id', models.IntegerField()),
-                ('action', models.CharField(max_length=50)),
-                ('target_type', models.CharField(max_length=50)),
-                ('target_id', models.IntegerField()),
-                ('metadata', models.JSONField(blank=True, default=dict)),
-                ('ip_address', models.GenericIPAddressField(blank=True, null=True)),
-                ('user_agent', models.TextField(blank=True, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    django_mongodb_backend.fields.ObjectIdAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("user_id", models.IntegerField()),
+                ("action", models.CharField(max_length=50)),
+                ("target_type", models.CharField(max_length=50)),
+                ("target_id", models.IntegerField()),
+                ("metadata", models.JSONField(blank=True, default=dict)),
+                ("ip_address", models.GenericIPAddressField(blank=True, null=True)),
+                ("user_agent", models.TextField(blank=True, null=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
             ],
             options={
-                'db_table': 'activities',
-                'ordering': ['-created_at'],
+                "db_table": "activities",
+                "ordering": ["-created_at"],
             },
         ),
     ]
