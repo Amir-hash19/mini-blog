@@ -2,12 +2,12 @@ from rest_framework import status, mixins, generics, permissions
 from rest_framework.response import Response
 import logging
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Post, Comment
+from .models import Post, Comment, Like
 from django.db import transaction
 from .permissions import IsCommentAuthorOrReadOnly
 logger = logging.getLogger(__name__)
 
-from .serializers import PostSerializer, CommentSerializer
+from .serializers import PostSerializer, CommentSerializer, LikeSerializer
 
 
 class CreatePostView(generics.CreateAPIView):
@@ -85,3 +85,12 @@ class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
         ]
     lookup_field = "id"
     lookup_url_kwarg = "comment_id"
+
+
+
+
+
+class CreateLikeView(generics.CreateAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = LikeSerializer
+    queryset = Like.objects.all()

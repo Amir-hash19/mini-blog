@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment
+from .models import Post, Comment, Like
 
 from django.utils import timezone
 
@@ -43,5 +43,23 @@ class CommentSerializer(serializers.ModelSerializer):
         
         return Comment.objects.create(
             author=self.context["request"].user,
+            **validated_data
+        )
+
+
+
+
+class LikeSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(source="user.username", read_only=True)
+    post = serializers.PrimaryKeyRelatedField(queryset=Post.objects.all(), write_only=True)
+
+    class Meta:
+        model = Like
+        fields = ['post', 'user', 'created_at']
+        read_only_fields = ['user', 'created_at']
+
+    def create(self, validated_data):
+        return Like.objects.create(
+            user=self.context["request"].user,
             **validated_data
         )
