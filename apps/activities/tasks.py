@@ -16,7 +16,7 @@ logger = get_task_logger(__name__)
     soft_time_limit=10,
     time_limit=15,
 )
-def process_activity_event(event_data):
+def process_activity_event(self, event_data):
     activity = create_activity(event_data)
 
     logger.info(
