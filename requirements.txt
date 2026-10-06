@@ -4,6 +4,8 @@ pymongo==4.15.3
 django-mongodb-backend==6.0.4
 gunicorn==26.2.0
 whitenoise==6.9.0
+celery
+redis
 
 
 python-decouple==3.8
