@@ -1,8 +1,6 @@
 from .models import Activity
 
 
-
-
 def create_activity(event_data: dict) -> Activity:
     return Activity.objects.create(
         user_id=event_data["user_id"],
