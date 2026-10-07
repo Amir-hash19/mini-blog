@@ -3,7 +3,6 @@ from rest_framework import serializers
 from apps.activities.events import ActivityEvent
 from apps.activities.publisher import publish_event
 
-
 from .models import Profile, User
 
 
@@ -36,7 +35,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
                 user_agent=request.META.get("HTTP_USER_AGENT") if request else None,
                 metadata={
                     "username": user.username,
-                }
+                },
             )
         )
 
@@ -58,7 +57,7 @@ class UserLoginSerializer(serializers.Serializer):
 
         if not user.check_password(password):
             raise serializers.ValidationError("Invalid username or password.")
-        
+
         publish_event(
             ActivityEvent(
                 user_id=user.id,

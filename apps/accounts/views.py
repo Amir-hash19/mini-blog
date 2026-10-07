@@ -8,10 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-
 from apps.activities.events import ActivityEvent
 from apps.activities.publisher import publish_event
-
 
 from .models import Profile, User
 from .serializers import (
@@ -38,9 +36,7 @@ class UserRegistrationView(APIView):
         logger.info(f"User registration request data: {request.data}")
 
         serializer = UserRegistrationSerializer(
-            data=request.data,
-            context={"request": request}
-        
+            data=request.data, context={"request": request}
         )
 
         serializer.is_valid(raise_exception=True)
@@ -123,19 +119,18 @@ class ProfileUpdateViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 class UserLogOut(APIView):
     permission_classes = [IsAuthenticated]
 
-
     def post(self, request):
         user = request.user
         try:
             refresh_token = request.data.get("refresh")
             if not refresh_token:
                 return Response(
-                    {"detail":"Refresh token required."},
-                    status=status.HTTP_400_BAD_REQUEST
+                    {"detail": "Refresh token required."},
+                    status=status.HTTP_400_BAD_REQUEST,
                 )
             token = RefreshToken(refresh_token)
             token.blacklist()
-            
+
             publish_event(
                 ActivityEvent(
                     user_id=user.id,
@@ -144,18 +139,14 @@ class UserLogOut(APIView):
                     target_id=user.id,
                     ip_address=request.META.get("REMOTE_ADDR") if request else None,
                     user_agent=request.META.get("HTTP_USER_AGENT") if request else None,
-                    
                 )
             )
 
             return Response(
-                {"message":"User Logout was Successful."},
-                status=status.HTTP_200_OK
+                {"message": "User Logout was Successful."}, status=status.HTTP_200_OK
             )
 
         except TokenError:
             return Response(
-                {
-                    "detail":"Invalid Token"
-                }, status=status.HTTP_400_BAD_REQUEST
+                {"detail": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST
             )

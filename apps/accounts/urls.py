@@ -5,9 +5,9 @@ from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from .views import (
     ProfileUpdateViewSet,
     UserLoginView,
+    UserLogOut,
     UserProfileView,
     UserRegistrationView,
-    UserLogOut
 )
 
 router = DefaultRouter()
@@ -40,11 +40,7 @@ urlpatterns = [
         UserProfileView.as_view(),
         name="user-profile",
     ),
-    path(
-        "logout/",
-        UserLogOut.as_view(),
-        name="user-logout"
-    )
+    path("logout/", UserLogOut.as_view(), name="user-logout"),
 ]
 
 urlpatterns += router.urls
