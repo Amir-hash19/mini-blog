@@ -5,6 +5,9 @@ from rest_framework import generics, mixins, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from apps.activities.events import ActivityEvent
+from apps.activities.publisher import publish_event
+
 from .models import Comment, Like, Post
 from .permissions import IsCommentAuthorOrReadOnly
 
@@ -25,6 +28,26 @@ class PostDeleteDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = PostSerializer
     lookup_field = "id"
     lookup_url_kwarg = "post_id"
+
+    def perform_destroy(self, instance):
+        post_id = instance.id
+        author_id = instance.author.id
+
+        instance.delete()
+
+        publish_event(
+            ActivityEvent(
+                user_id=author_id,
+                action="post_deleted",
+                target_type="post",
+                target_id=post_id,
+                ip_address=self.request.META.get("REMOTE_ADDR"),
+                user_agent=self.request.META.get("HTTP_USER_AGENT"),
+                metadata={
+                    "message": f"Post with ID {post_id} was deleted by user with ID {author_id}.",
+                },
+            )
+        )
 
 
 class PostUpdateView(generics.RetrieveUpdateAPIView):
