@@ -93,18 +93,24 @@ jobs:
         run: pip install -r requirements.txt
 
 
-      - name: Run Django tests
+      - name: Run Django tests with coverage
         env:
           POSTGRES_DB: test_db
           POSTGRES_USER: test_user
           POSTGRES_PASSWORD: test_password
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_PORT: 5432
-
           MONGO_INITDB_ROOT_USERNAME: mongo
           MONGO_INITDB_ROOT_PASSWORD: mongo
           MONGO_DB: test_db
-
           CELERY_BROKER_URL: redis://127.0.0.1:6379/0
 
-        run: python manage.py test
+        run: coverage run --source=apps manage.py test
+
+      - name: Show coverage report 
+        run: coverage report -m     
+
+      - name: Check coverage threshold  
+        run: coverage report --fail-under=80
+
+        
