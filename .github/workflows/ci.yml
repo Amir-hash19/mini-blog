@@ -117,7 +117,7 @@ jobs:
         run: coverage html
 
       - name: Upload coverage report 
-        uses: action/upload-artifact@v4
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: htmlcov/    
