@@ -113,4 +113,13 @@ jobs:
       - name: Check coverage threshold  
         run: coverage report --fail-under=80
 
+      - name: Generate coverage HTML report 
+        run: coverage html
+
+      - name: Upload coverage report 
+        uses: action/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: htmlcov/    
+
         
