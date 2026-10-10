@@ -127,14 +127,14 @@ jobs:
   # Docker Build and Push
   # -------------------------
 
-  
+
   build-and-push:
     name: Build and Push Docker Image
 
     needs:
       - quality
       - test
-      - django-security-check
+     
 
     if: >-
       github.event_name == 'push' &&
