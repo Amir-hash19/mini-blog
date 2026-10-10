@@ -25,6 +25,10 @@ RUN POSTGRES_DB=build_db \
     POSTGRES_PASSWORD=build_password \
     POSTGRES_HOST=localhost \
     POSTGRES_PORT=5432 \
+    MONGO_INITDB_ROOT_USERNAME=build_user \
+    MONGO_INITDB_ROOT_PASSWORD=build_password \
+    MONGO_HOST=localhost \
+    MONGO_PORT=27017 \
     python manage.py collectstatic --noinput
 
 EXPOSE 8000
