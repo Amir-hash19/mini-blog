@@ -20,15 +20,18 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 
-RUN POSTGRES_DB=build_db \
-    POSTGRES_USER=build_user \
+RUN POSTGRES_DB=mini_blog \
+    POSTGRES_USER=postgres \
     POSTGRES_PASSWORD=build_password \
     POSTGRES_HOST=localhost \
     POSTGRES_PORT=5432 \
-    MONGO_INITDB_ROOT_USERNAME=build_user \
+    MONGO_INITDB_ROOT_USERNAME=mongo \
     MONGO_INITDB_ROOT_PASSWORD=build_password \
     MONGO_HOST=localhost \
     MONGO_PORT=27017 \
+    MONGO_DB=mini_blog \
+    CELERY_BROKER_URL=redis://localhost:6379/0 \
+    REDIS_CACHE_URL=redis://localhost:6379/1 \
     python manage.py collectstatic --noinput
 
 EXPOSE 8000
